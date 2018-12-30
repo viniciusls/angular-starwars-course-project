@@ -1,17 +1,40 @@
 import { Subject } from 'rxjs';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import 'rxjs/add/operator/map';
 
+@Injectable()
 export class StarWarsService {
-  private characters = [
-    {
-      name: 'Luke Skywalker',
-      side: ''
-    },
-    {
-      name: 'Darth Vader',
-      side: ''
-    }
-  ];
+  private characters = [];
   charactersUpdated = new Subject<void>();
+  httpClient: HttpClient;
+
+  constructor(httpClient: HttpClient) {
+    this.httpClient = httpClient;
+  }
+
+  fetchCharacters() {
+    interface CharactersResponse {
+      results: [];
+    }
+
+    this.httpClient.get('http://localhost:8000/starwars_people.json')
+      .map((response: CharactersResponse) => {
+        const data = response;
+        const extractedChars = data.results;
+        const chars = extractedChars.map((char) => {
+            return { name: char.name, side: '' };
+        });
+
+        return chars;
+      })
+      .subscribe(
+        (data) => {
+          this.characters = data;
+          this.charactersUpdated.next();
+        }
+      );
+  }
 
   getCharacters(chosenList) {
     if (chosenList === 'all') {
