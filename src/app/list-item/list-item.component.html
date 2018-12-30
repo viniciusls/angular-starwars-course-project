@@ -1,0 +1,9 @@
+<a class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1">{{ character.name }}</h5>
+    </div>
+    <div class="mb-1">
+        <button class="btn btn-primary" (click)="onAssignSide('light')">Light</button>
+        <button class="btn btn-danger" (click)="onAssignSide('dark')">Dark</button>
+    </div>
+</a>
