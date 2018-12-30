@@ -18,11 +18,15 @@ export class StarWarsService {
       results: [];
     }
 
+    interface Char {
+      name: string;
+    }
+
     this.httpClient.get('http://localhost:8000/starwars_people.json')
       .map((response: CharactersResponse) => {
         const data = response;
         const extractedChars = data.results;
-        const chars = extractedChars.map((char) => {
+        const chars = extractedChars.map((char: Char) => {
             return { name: char.name, side: '' };
         });
 
